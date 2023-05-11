@@ -141,6 +141,7 @@ class Level:
 				self.tooth_top=tooth.rect.top
 				self.player_bottom=self.player.rect.bottom
 				if self.tooth_top<self.player_bottom<self.tooth_center and self.player.direction.y >=0:
+					self.player.direction.y = -2
 					tooth.kill()
 
 	#if player falls off ground
