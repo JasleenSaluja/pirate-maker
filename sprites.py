@@ -5,6 +5,7 @@ from settings import *
 from timer import Timer
 
 from random import choice, randint
+from support import import_folder
 
 class Generic(pygame.sprite.Sprite):
 	def __init__(self, pos, surf, group, z = LEVEL_LAYERS['main']):
@@ -221,15 +222,15 @@ class Player(Generic):
 		self.direction = vector()
 		self.pos = vector(self.rect.center)
 		self.speed = 300
-		self.gravity = 4
+		self.gravity = 5
 		self.on_floor = False
 
 		# collision
 		self.collision_sprites = collision_sprites
-		self.hitbox = self.rect.inflate(-50,0)
+		self.hitbox = self.rect.inflate(0,0)
 
 		# timer 
-		self.invul_timer = Timer(200)
+		self.invul_timer = Timer(300)
 
 		#sound
 		self.jump_sound = jump_sound
@@ -254,6 +255,11 @@ class Player(Generic):
 		self.frame_index = 0 if self.frame_index >= len(current_animation) else self.frame_index
 		self.image = current_animation[int(self.frame_index)]
 		self.mask = pygame.mask.from_surface(self.image)
+
+		# if self.invul_timer.active:
+		# 	surf = import_folder('graphics/player_1/dead_right')
+		# 	self.image = surf
+
 
 		if self.invul_timer.active:
 			surf = self.mask.to_surface()

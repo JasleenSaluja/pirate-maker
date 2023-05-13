@@ -7,6 +7,8 @@ from support import *
 from sprites import Generic, Block, Animated, Particle, Coin, Player, Spikes, Tooth, Shell, Cloud
 
 from random import choice, randint
+from GameOver import GameOver
+from GameWin import GameWin
 
 class Level:
 	def __init__(self, grid, switch, asset_dict, audio,change_coins):
@@ -20,6 +22,11 @@ class Level:
 		self.collision_sprites = pygame.sprite.Group()
 		self.shell_sprites = pygame.sprite.Group()
 		self.killable_sprites = pygame.sprite.Group() #change
+		self.win_spriites = pygame.sprite.Group() #change
+
+		#gameover and gamewin screen
+		self.gameover=GameOver() #change
+		self.gamewin=GameWin()
 		
 
 		self.build_level(grid, asset_dict, audio['jump'])
@@ -101,19 +108,19 @@ class Level:
 						Animated(asset_dict['palms']['small_fg'], pos, self.all_sprites)
 						Block(pos, (76,50), self.collision_sprites)
 					case 12: 
-						Animated(asset_dict['palms']['large_fg'], pos, self.all_sprites)
-						Block(pos, (76,50), self.collision_sprites)
+						Animated(asset_dict['palms']['tree'], pos, self.all_sprites)
+						#Block(pos, (76,50), self.collision_sprites)
 					case 13: 
-						Animated(asset_dict['palms']['left_fg'], pos, self.all_sprites)
-						Block(pos, (76,50), self.collision_sprites)
+						Animated(asset_dict['palms']['skeleton'], pos, self.all_sprites)
+						Block(pos, (42,32), self.collision_sprites)
 					case 14: 
-						Animated(asset_dict['palms']['right_fg'], pos, self.all_sprites)
-						Block(pos + vector(50,0), (76,50), self.collision_sprites)
+						Animated(asset_dict['palms']['crate'], pos, self.all_sprites)
+						Block(pos, (64,64), self.collision_sprites)
 					
-					case 15: Animated(asset_dict['palms']['small_bg'], pos, self.all_sprites, LEVEL_LAYERS['bg'])
-					case 16: Animated(asset_dict['palms']['large_bg'], pos, self.all_sprites, LEVEL_LAYERS['bg'])
-					case 17: Animated(asset_dict['palms']['left_bg'], pos, self.all_sprites, LEVEL_LAYERS['bg'])
-					case 18: Animated(asset_dict['palms']['right_bg'], pos, self.all_sprites, LEVEL_LAYERS['bg'])
+					case 15: Animated(asset_dict['palms']['small_bg'], pos,[ self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
+					case 16: Animated(asset_dict['palms']['large_bg'], pos, [self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
+					case 17: Animated(asset_dict['palms']['left_bg'], pos, [self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
+					case 18: Animated(asset_dict['palms']['right_bg'],[ pos, self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
 
 		for sprite in self.shell_sprites:
 			sprite.player = self.player
@@ -130,8 +137,12 @@ class Level:
 		if collision_sprites:
 			self.hit_sound.play()
 			self.player.damage()
-			pygame.quit()  #player dead 
-			exit()
+			self.bg_music.stop()
+			self.gameover.run(dt=0) #change
+			# pygame.quit()  #player dead 
+			# exit()
+
+
   # killing the tooth if the player jumps on it
 	def tooth_kill(self):  #change
 		tooth_sprites=pygame.sprite.spritecollide(self.player, self.killable_sprites, False)
@@ -146,16 +157,22 @@ class Level:
 
 	#if player falls off ground
 	def check_death(self): #change
-		if self.player.rect.top > WINDOW_HEIGHT: #change
-			pygame.quit() 
-			exit()
+		if self.player.rect.top > WINDOW_HEIGHT-300: #change
+			self.bg_music.stop()
+			self.gameover.run(dt=0)
+			# pygame.quit() 
+			# exit()
 
 
 	#player wins- if the player collides with the win board
-	# def check_win(self):
-	# 	if pygame.sprite.collide_rect(self.player, self.win_board,False):
-	# 		self.switch()
-	# 		self.bg_music.stop()
+	def check_win(self):#change
+		if pygame.sprite.spritecollide(self.player, self.win_spriites,True):
+			self.bg_music.stop()
+			self.gamewin.run(dt=0)
+			# pygame.quit()
+			# exit()
+			# self.switch()
+			# self.bg_music.stop()
 
 			
 
@@ -190,7 +207,8 @@ class Level:
 		self.get_coins()
 		self.tooth_kill() #change
 		self.get_damage()
-		self.check_death()
+		self.check_death()#change
+		self.check_win()#change
 
 		# drawing
 		self.display_surface.fill(SKY_COLOR)
