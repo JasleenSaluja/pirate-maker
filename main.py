@@ -31,12 +31,12 @@ class Main:
 		self.coins_collected=0 #change
 		
 		#user interface
-		self.ui=UI(self.display_surface) #change
+		self.ui=UI(self.display_surface) #change 
 
 
 	def imports(self):
 		# terrain
-		self.land_tiles = import_folder_dict('graphics/terrain/land')
+		self.land_tiles = import_folder_dict('graphics/terrain/land_1')
 		self.water_bottom = load('graphics/terrain/water/water_bottom.png').convert_alpha()
 		self.water_top_animation = import_folder('graphics/terrain/water/animation')
 
@@ -47,16 +47,16 @@ class Main:
 		self.particle = import_folder('graphics/items/particle')
 
 		# palm trees
-		self.palms = {folder: import_folder(f'graphics/terrain/palm/{folder}') for folder in list(walk('graphics/terrain/palm'))[0][1]}
+		self.palms = {folder: import_folder(f'graphics/terrain/obstacles/{folder}') for folder in list(walk('graphics/terrain/obstacles'))[0][1]}
 
 		# enemies
 		self.spikes = load('graphics/enemies/spikes/spikes.png').convert_alpha()
-		self.tooth = {folder: import_folder(f'graphics/enemies/tooth/{folder}') for folder in list(walk('graphics/enemies/tooth'))[0][1]}
+		self.tooth = {folder: import_folder(f'graphics/enemies/zombie/{folder}') for folder in list(walk('graphics/enemies/zombie'))[0][1]}
 		self.shell = {folder: import_folder(f'../graphics/enemies/shell_left/{folder}') for folder in list(walk('graphics/enemies/shell_left/'))[0][1]}
 		self.pearl = load('graphics/enemies/pearl/pearl.png').convert_alpha()
 
 		# player
-		self.player_graphics = {folder: import_folder(f'graphics/player/{folder}') for folder in list(walk('graphics/player/'))[0][1]}
+		self.player_graphics = {folder: import_folder(f'graphics/player_1/{folder}') for folder in list(walk('graphics/player_1/'))[0][1]}
 
 		# clouds
 		self.clouds = import_folder('graphics/clouds')
