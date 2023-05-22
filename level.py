@@ -22,7 +22,7 @@ class Level:
 		self.collision_sprites = pygame.sprite.Group()
 		self.shell_sprites = pygame.sprite.Group()
 		self.killable_sprites = pygame.sprite.Group() #change
-		self.win_spriites = pygame.sprite.Group() #change
+		self.win_sprites = pygame.sprite.Group() #change
 
 		#gameover and gamewin screen
 		self.gameover=GameOver() #change
@@ -117,10 +117,10 @@ class Level:
 						Animated(asset_dict['palms']['crate'], pos, self.all_sprites)
 						Block(pos, (64,64), self.collision_sprites)
 					
-					case 15: Animated(asset_dict['palms']['small_bg'], pos,[ self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
-					case 16: Animated(asset_dict['palms']['large_bg'], pos, [self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
-					case 17: Animated(asset_dict['palms']['left_bg'], pos, [self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
-					case 18: Animated(asset_dict['palms']['right_bg'],[ pos, self.all_sprites,self.win_spriites], LEVEL_LAYERS['bg']) #change
+					case 15: Animated(asset_dict['palms']['small_bg'], pos,[ self.all_sprites,self.win_sprites], LEVEL_LAYERS['bg']) #change
+					case 16: Animated(asset_dict['palms']['large_bg'], pos, [self.all_sprites,self.win_sprites], LEVEL_LAYERS['bg']) #change
+					case 17: Animated(asset_dict['palms']['left_bg'], pos, [self.all_sprites,self.win_sprites], LEVEL_LAYERS['bg']) #change
+					case 18: Animated(asset_dict['palms']['right_bg'],[ pos, self.all_sprites,self.win_sprites], LEVEL_LAYERS['bg']) #change
 
 		for sprite in self.shell_sprites:
 			sprite.player = self.player
@@ -166,7 +166,7 @@ class Level:
 
 	#player wins- if the player collides with the win board
 	def check_win(self):#change
-		if pygame.sprite.spritecollide(self.player, self.win_spriites,True):
+		if pygame.sprite.spritecollide(self.player, self.win_sprites,True):
 			self.bg_music.stop()
 			self.gamewin.run(dt=0)
 			# pygame.quit()
